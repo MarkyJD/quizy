@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:quizy/question.dart';
 import 'package:quizy/questionbank.dart';
+import 'package:quizy/scorescreen.dart';
 
 class Quiz extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _QuizState extends State<Quiz> {
 
   QuestionBank questionBank = new QuestionBank();
   List<Question> questions;
+  List<List<String>> wrongList = [];
   int questionIndex = 0;
 
   void questionAnswered(int answerIndex) {
@@ -37,6 +39,12 @@ class _QuizState extends State<Quiz> {
           correct = true;
           score++;
         } else {
+          List<String> list = [
+            questionIndex.toString(),
+            questions.elementAt(questionIndex).question,
+            questions.elementAt(questionIndex).correctAnswer
+          ];
+          wrongList.add(list);
           correct = false;
         }
         // Set button's state. This will control what color gets rendered.
@@ -216,12 +224,22 @@ class _QuizState extends State<Quiz> {
               ),
               child: Center(
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => ScoreScreen(
+                          score,
+                          wrongList,
+                          questions.length,
+                        ),
+                      ),
+                    );
+                  },
                   elevation: 10.0,
                   minWidth: 150,
                   height: 40,
                   child: Text(
-                    'End',
+                    'End Quiz',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16.0,
@@ -230,7 +248,7 @@ class _QuizState extends State<Quiz> {
                       fontFamily: 'Playfair',
                     ),
                   ),
-                  color: color2,
+                  color: quizOver ? correctColor : wrongColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),

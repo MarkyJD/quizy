@@ -11,6 +11,7 @@ class Question {
 
   String get question => _question;
   List<String> get answers => _answers;
+  String get correctAnswer => _correctAnswer;
 
   bool isAnswerCorrect(String answer) {
     return answer.compareTo(_correctAnswer) == 0 ? true : false;
