@@ -68,12 +68,12 @@ class QuestionBank {
       'Nested'
     ],
     [
-      'Which statement is correct?',
-      'int myArray[] = 5;',
-      'int[] myArray = int[5];',
-      'int[] myArray = new int[5];',
-      'int[] myArray = [5];',
-      'int[] myArray = new int[5];'
+      'What keyword is used to create an instance of class?',
+      'create',
+      'new',
+      'get',
+      'return',
+      'new'
     ],
     [
       'What type of argument does the startActivity() method take?',

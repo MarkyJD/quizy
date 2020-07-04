@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:quizy/question.dart';
+import 'package:quizy/questionbank.dart';
 
 class Quiz extends StatefulWidget {
   @override
@@ -9,17 +13,87 @@ class _QuizState extends State<Quiz> {
   final Color color1 = Color(0xff8A2387);
   final Color color2 = Color(0xffE94057);
   final Color color3 = Color(0xffF27121);
+  final Color wrongColor = Color(0x66eb4034);
+  final Color correctColor = Color(0x6680f28c);
+  final Color defalutColor = Colors.white24;
+  int button0 = 0, button1 = 0, button2 = 0, button3 = 0;
+  int score = 0;
+  bool quizOver = false;
 
-  Widget answerButton() {
+  QuestionBank questionBank = new QuestionBank();
+  List<Question> questions;
+  int questionIndex = 0;
+
+  void questionAnswered(int answerIndex) {
+    bool correct;
+    String currentAnswer =
+        questions.elementAt(questionIndex).answers[answerIndex];
+    print(currentAnswer);
+    print(questions.elementAt(questionIndex).isAnswerCorrect(currentAnswer));
+
+    if (!quizOver) {
+      setState(() {
+        if (questions.elementAt(questionIndex).isAnswerCorrect(currentAnswer)) {
+          correct = true;
+          score++;
+        } else {
+          correct = false;
+        }
+        // Set button's state. This will control what color gets rendered.
+        switch (answerIndex) {
+          case 0:
+            button0 = correct ? 1 : -1;
+            break;
+          case 1:
+            button1 = correct ? 1 : -1;
+            break;
+          case 2:
+            button2 = correct ? 1 : -1;
+            break;
+          case 3:
+            button3 = correct ? 1 : -1;
+            break;
+        }
+      });
+    }
+
+    Timer(Duration(seconds: 1), () {
+      setState(() {
+        if (questionIndex < questions.length - 1) {
+          questionIndex++;
+        } else {
+          quizOver = true;
+        }
+        button0 = 0;
+        button1 = 0;
+        button2 = 0;
+        button3 = 0;
+      });
+    });
+  }
+
+  Color getColor(int number) {
+    if (number == -1) {
+      return wrongColor;
+    } else if (number == 1) {
+      return correctColor;
+    } else {
+      return Colors.white12;
+    }
+  }
+
+  Widget answerButton(int answerIndex, int buttonNumber) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: MaterialButton(
-        onPressed: () {},
+        onPressed: () {
+          questionAnswered(answerIndex);
+        },
         elevation: 10.0,
         minWidth: 200,
         height: 45,
         child: Text(
-          'Start Quiz',
+          questions.elementAt(questionIndex).answers[answerIndex],
           style: TextStyle(
             color: Colors.white,
             fontSize: 16.0,
@@ -28,7 +102,7 @@ class _QuizState extends State<Quiz> {
             fontFamily: 'Playfair',
           ),
         ),
-        color: Colors.white24,
+        color: getColor(buttonNumber),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
@@ -38,6 +112,7 @@ class _QuizState extends State<Quiz> {
 
   @override
   Widget build(BuildContext context) {
+    questions = questionBank.questionsList;
     return Scaffold(
       backgroundColor: Colors.blueGrey[800],
       appBar: AppBar(
@@ -54,14 +129,55 @@ class _QuizState extends State<Quiz> {
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 3,
+            flex: 1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        'Topic: Android Programming Language',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontFamily: 'Playfair',
+                          color: Colors.blueGrey[400],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        '${questionIndex + 1} / ${questions.length}',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontFamily: 'Playfair',
+                          color: Colors.blueGrey[100],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 2,
             child: Container(
               padding: EdgeInsets.symmetric(
                 horizontal: 20.0,
               ),
-              child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Text(
-                  'How many roads must a man walk down?',
+                  questions.elementAt(questionIndex).question,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
@@ -78,10 +194,10 @@ class _QuizState extends State<Quiz> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  answerButton(),
-                  answerButton(),
-                  answerButton(),
-                  answerButton(),
+                  answerButton(0, button0),
+                  answerButton(1, button1),
+                  answerButton(2, button2),
+                  answerButton(3, button3),
                 ],
               ),
             ),

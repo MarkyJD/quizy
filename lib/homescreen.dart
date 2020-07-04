@@ -60,8 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(
                     'Welcome to\nQuizy!',
                     style: TextStyle(
-                      color: color3,
-                      shadows: [Shadow(color: Colors.white, blurRadius: 2.0)],
+                      color: Colors.blueGrey[900],
+                      shadows: [Shadow(color: Colors.white, blurRadius: 3.0)],
                       letterSpacing: 1.5,
                       fontSize: 40,
                       fontFamily: 'Merriweather',
