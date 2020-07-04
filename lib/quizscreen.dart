@@ -23,7 +23,7 @@ class _QuizState extends State<Quiz> {
 
   QuestionBank questionBank = new QuestionBank();
   List<Question> questions;
-  List<List<String>> wrongList = [];
+  List<int> wrongList = [];
   int questionIndex = 0;
 
   void questionAnswered(int answerIndex) {
@@ -39,12 +39,7 @@ class _QuizState extends State<Quiz> {
           correct = true;
           score++;
         } else {
-          List<String> list = [
-            questionIndex.toString(),
-            questions.elementAt(questionIndex).question,
-            questions.elementAt(questionIndex).correctAnswer
-          ];
-          wrongList.add(list);
+          wrongList.add(questionIndex);
           correct = false;
         }
         // Set button's state. This will control what color gets rendered.
@@ -230,7 +225,7 @@ class _QuizState extends State<Quiz> {
                         builder: (context) => ScoreScreen(
                           score,
                           wrongList,
-                          questions.length,
+                          questions,
                         ),
                       ),
                     );
