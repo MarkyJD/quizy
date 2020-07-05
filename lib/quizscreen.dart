@@ -20,6 +20,7 @@ class _QuizState extends State<Quiz> {
   int button0 = 0, button1 = 0, button2 = 0, button3 = 0;
   int score = 0;
   bool quizOver = false;
+  bool pressable = true;
 
   QuestionBank questionBank = new QuestionBank();
   List<Question> questions;
@@ -27,6 +28,7 @@ class _QuizState extends State<Quiz> {
   int questionIndex = 0;
 
   void questionAnswered(int answerIndex) {
+    pressable = false;
     bool correct;
     String currentAnswer =
         questions.elementAt(questionIndex).answers[answerIndex];
@@ -58,7 +60,7 @@ class _QuizState extends State<Quiz> {
       });
     }
 
-    Timer(Duration(milliseconds: 300), () {
+    Timer(Duration(milliseconds: 500), () {
       setState(() {
         if (questionIndex < questions.length - 1) {
           questionIndex++;
@@ -69,6 +71,7 @@ class _QuizState extends State<Quiz> {
         button1 = 0;
         button2 = 0;
         button3 = 0;
+        pressable = true;
       });
     });
   }
@@ -88,7 +91,9 @@ class _QuizState extends State<Quiz> {
       padding: EdgeInsets.all(8.0),
       child: MaterialButton(
         onPressed: () {
-          questionAnswered(answerIndex);
+          if (pressable) {
+            questionAnswered(answerIndex);
+          }
         },
         elevation: 10.0,
         minWidth: 200,
