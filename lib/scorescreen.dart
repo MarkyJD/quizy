@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:quizy/homescreen.dart';
 import 'package:quizy/question.dart';
-import 'dart:io' show Platform, exit;
 
 class ScoreScreen extends StatelessWidget {
   final int score;
@@ -18,10 +17,9 @@ class ScoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(wrongList);
     double percentage = (score.toDouble() / questions.length.toDouble()) * 100;
     return Scaffold(
-      backgroundColor: Colors.blueGrey[400],
+      backgroundColor: Colors.blueGrey[800],
       appBar: AppBar(
         title: Text(
           'Quizy',
@@ -60,19 +58,24 @@ class ScoreScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Text(
-                          '\nAnswers:',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontFamily: 'Merriweather',
-                            fontSize: 20.0,
-                            color: Colors.blueGrey[900],
-                            shadows: [
-                              Shadow(
-                                color: Colors.blueGrey[900],
-                                blurRadius: 4.0,
-                              ),
-                            ],
+                        Container(
+                          margin: EdgeInsets.only(
+                            left: 200,
+                          ),
+                          child: Text(
+                            '\nCorrect Answers:',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontFamily: 'Merriweather',
+                              fontSize: 16.0,
+                              color: Colors.blueGrey[300],
+                              shadows: [
+                                Shadow(
+                                  color: Colors.blueGrey[400],
+                                  blurRadius: 2.0,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -83,17 +86,28 @@ class ScoreScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 4,
+            flex: 5,
             child: Container(
               child: ListView.builder(
+                itemExtent: 80,
                 itemCount: questions.length,
                 itemBuilder: (context, index) {
                   return Card(
                     color:
                         wrongList.contains(index) ? wrongColor : correctColor,
                     child: ListTile(
+                      dense: true,
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 20.0,
+                      ),
+                      trailing: Text(
+                        '${questions.elementAt(index).correctAnswer}',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Merriweather',
+                          fontSize: 12.0,
+                        ),
                       ),
                       onTap: () {},
                       subtitle: Text(
@@ -107,7 +121,7 @@ class ScoreScreen extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Playfair',
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Colors.orange[100],
                         ),
                       ),
                     ),
@@ -131,11 +145,11 @@ class ScoreScreen extends StatelessWidget {
               child: Center(
                 child: MaterialButton(
                   onPressed: () {
-                    if (Platform.isAndroid) {
-                      SystemNavigator.pop();
-                    } else {
-                      exit(0);
-                    }
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => MyHomePage(),
+                      ),
+                    );
                   },
                   elevation: 10.0,
                   minWidth: 150,

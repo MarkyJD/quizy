@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:quizy/main.dart';
 import 'package:quizy/homescreen.dart';
 
 class SplashScreen extends StatefulWidget {

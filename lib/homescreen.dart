@@ -22,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       isPressed = true;
     });
-    Timer(Duration(milliseconds: 1500), () {
+    Timer(Duration(milliseconds: 300), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => Quiz(),
@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[200],
+      backgroundColor: Colors.blueGrey[800],
       appBar: AppBar(
         title: Text(
           'Quizy',
@@ -60,8 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(
                     'Welcome to\nQuizy!',
                     style: TextStyle(
-                      color: Colors.blueGrey[900],
-                      shadows: [Shadow(color: Colors.white, blurRadius: 3.0)],
+                      color: Colors.blueGrey[200],
+                      shadows: [Shadow(color: Colors.white, blurRadius: 1.0)],
                       letterSpacing: 1.5,
                       fontSize: 40,
                       fontFamily: 'Merriweather',

@@ -30,8 +30,6 @@ class _QuizState extends State<Quiz> {
     bool correct;
     String currentAnswer =
         questions.elementAt(questionIndex).answers[answerIndex];
-    print(currentAnswer);
-    print(questions.elementAt(questionIndex).isAnswerCorrect(currentAnswer));
 
     if (!quizOver) {
       setState(() {
@@ -60,7 +58,7 @@ class _QuizState extends State<Quiz> {
       });
     }
 
-    Timer(Duration(seconds: 1), () {
+    Timer(Duration(milliseconds: 300), () {
       setState(() {
         if (questionIndex < questions.length - 1) {
           questionIndex++;
@@ -220,6 +218,12 @@ class _QuizState extends State<Quiz> {
               child: Center(
                 child: MaterialButton(
                   onPressed: () {
+                    // If quiz ends prematurely, mark the rest wrong
+                    if (!quizOver) {
+                      for (int i = questionIndex; i < questions.length; i++) {
+                        wrongList.add(i);
+                      }
+                    }
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => ScoreScreen(
